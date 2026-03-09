@@ -25,8 +25,8 @@ class User(Base):
 
     id: Mapped[int] = mapped_column(
         Integer, primary_key=True, autoincrement=True, index=True)
-    first_name: Mapped[str]
-    last_name: Mapped[str]
+    first_name: Mapped[str] = mapped_column(String(255))
+    last_name: Mapped[str] = mapped_column(String(255))
     email: Mapped[str_uniq] = mapped_column(index=True)
     password: Mapped[str]
     role_id: Mapped[int] = mapped_column(ForeignKey(

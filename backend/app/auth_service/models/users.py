@@ -28,7 +28,7 @@ class User(Base):
     first_name: Mapped[str] = mapped_column(String(255))
     last_name: Mapped[str] = mapped_column(String(255))
     email: Mapped[str_uniq] = mapped_column(index=True)
-    password: Mapped[str]
+    password: Mapped[str] = mapped_column(nullable=False)
     role_id: Mapped[int] = mapped_column(ForeignKey(
         "roles.id"), default=1, server_default=text("1"), index=True)
     role: Mapped["Role"] = relationship(

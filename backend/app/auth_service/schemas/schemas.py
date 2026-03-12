@@ -1,4 +1,3 @@
-import re
 from typing import Self
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, model_validator, computed_field
 from utils.utils import get_hashed_password

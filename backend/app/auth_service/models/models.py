@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional
 from db.database import str_uniq
 
-from sqlalchemy import String, DateTime, Boolean, func, text, ForeignKey, Integer
+from sqlalchemy import String, DateTime, func, text, ForeignKey, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from db.database import Base

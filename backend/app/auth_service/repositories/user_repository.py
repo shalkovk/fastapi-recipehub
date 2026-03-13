@@ -33,6 +33,12 @@ class UserRepository:
         record = result.scalar_one_or_none()
         return record
 
+    async def get_users_by_role(self, role_id: int) -> Optional[User]:
+        query = select(User).where(User.role_id == role_id)
+        result = await self._session.execute(query)
+        records = result.scalars().all()
+        return records
+
     async def add_user(self, user_data: SUserAddDb) -> User:
         new_user = User(**user_data.model_dump())
         self._session.add(new_user)

@@ -1,12 +1,11 @@
-def create_tokens():
+from fastapi.responses import Response
+
+
+def create_tokens(data: dict):
     pass
 
 
-def get_access_token(request: dict):
-    pass
-
-
-def get_refresh_token(request: dict):
+def set_tokens(response: Response, user_id: int):
     pass
 
 

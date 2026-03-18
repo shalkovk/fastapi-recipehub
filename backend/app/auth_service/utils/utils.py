@@ -9,5 +9,9 @@ def set_tokens(response: Response, user_id: int):
     pass
 
 
+def authenticate_user(user, password):
+    pass
+
+
 def get_hashed_password(password: str) -> str:
     pass

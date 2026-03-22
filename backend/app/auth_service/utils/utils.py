@@ -1,7 +1,7 @@
 from fastapi.responses import Response
 
 
-def create_tokens(data: dict):
+def create_tokens(data: dict) -> dict:
     pass
 
 

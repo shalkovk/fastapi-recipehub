@@ -15,3 +15,7 @@ async def authenticate_user(user, password):
 
 def get_hashed_password(password: str) -> str:
     pass
+
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    pass

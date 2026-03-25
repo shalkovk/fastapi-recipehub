@@ -9,7 +9,7 @@ def set_tokens(response: Response, user_id: int):
     pass
 
 
-async def authenticate_user(user, password):
+async def authenticate_user(user, password) -> bool:
     pass
 
 

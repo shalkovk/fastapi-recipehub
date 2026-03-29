@@ -24,7 +24,9 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 async def authenticate_user(user, password) -> bool:
-    pass
+    if not user or verify_password(plain_password=password, hashed_password=user.password) is False:
+        return None
+    return user
 
 
 def get_hashed_password(password: str) -> str:

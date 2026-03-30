@@ -6,7 +6,23 @@ from fastapi.responses import Response
 
 
 def create_tokens(data: dict) -> dict:
-    pass
+    now = datetime.now(timezone.utc)
+
+    access_expire = now + timedelta(minutes=2)
+    access_payload = data.copy()
+    access_payload.update(
+        {"exp": int(access_expire.timestamp()), "type": "access"})
+    access_token = jwt.encode(
+        access_payload, settings.secret_key, algorithm=settings.algorithm)
+
+    refresh_expire = now + timedelta(days=7)
+    refresh_payload = data.copy()
+    refresh_payload.update(
+        {"exp": int(refresh_expire.timestamp()), "type": "refresh"})
+    refresh_token = jwt.encode(
+        refresh_payload, settings.secret_key, algorithm=settings.algorithm)
+
+    return {"access_token": access_token, "refresh_token": refresh_token}
 
 
 def set_tokens(response: Response, user_id: int):
@@ -23,7 +39,7 @@ def set_tokens(response: Response, user_id: int):
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-async def authenticate_user(user, password) -> bool:
+async def authenticate_user(user, password):
     if not user or verify_password(plain_password=password, hashed_password=user.password) is False:
         return None
     return user

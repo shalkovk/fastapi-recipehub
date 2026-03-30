@@ -5,6 +5,8 @@ class Settings(BaseSettings):
     app_name: str = "RecipeHub Auth service"
     debug: bool = True
     database_url: str
+    secret_key: str
+    algorithm: str
     cors_origins: list = [
         "http://localhost:5173",
         "http://localhost:3000",

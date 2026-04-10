@@ -24,7 +24,7 @@ class UserRepository:
         records = result.scalars().all()
         return records
 
-    async def get_user_by_email(self, user_email: str, session: AsyncSession) -> Optional[User]:
+    async def get_user_by_email(self, user_email: str, session: AsyncSession) -> User:
         query = select(User).where(User.email == user_email)
         result = await session.execute(query)
         record = result.scalar_one_or_none()

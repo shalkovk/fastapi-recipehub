@@ -4,5 +4,7 @@ UserAlreadyExistsException = HTTPException(
     status_code=status.HTTP_409_CONFLICT, detail="User already exists")
 
 InvalidCredentialsException = HTTPException(
-    status_code=status.HTTP_409_CONFLICT, detail="Incorrect email or password"
-)
+    status_code=status.HTTP_409_CONFLICT, detail="Incorrect email or password")
+
+UserNotFoundException = HTTPException(
+    status_code=status.HTTP_404_NOT_FOUND, detail="User not found")

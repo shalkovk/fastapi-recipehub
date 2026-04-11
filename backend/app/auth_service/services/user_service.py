@@ -2,7 +2,7 @@ from db.database_deps import get_session_with_commit, get_session_without_commit
 from repositories.user_repository import UserRepository
 from schemas.schemas import SUserRegister, SUserInfo, SUserAddDb, SUserAuth
 from sqlalchemy.ext.asyncio import AsyncSession
-from utils.exceptions import UserAlreadyExistsException, InvalidCredentialsException
+from utils.exceptions import UserAlreadyExistsException, InvalidCredentialsException, UserNotFoundException
 from utils.utils import get_hashed_password, authenticate_user, set_tokens
 from config import settings
 from fastapi import Response
@@ -30,3 +30,9 @@ class UserService:
             raise InvalidCredentialsException
         set_tokens(response=response, user_id=authenticated_user.id)
         return SUserInfo.model_validate(authenticated_user)
+
+    async def get_user_by_id(self, user_id: int, session: AsyncSession) -> SUserInfo:
+        user = await self.repository.get_user_by_id(user_id, session)
+        if not user:
+            raise UserNotFoundException
+        return SUserInfo.model_validate(user)

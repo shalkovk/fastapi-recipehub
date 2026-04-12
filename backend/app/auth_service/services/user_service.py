@@ -29,6 +29,7 @@ class UserService:
         authenticated_user = await authenticate_user(user, auth_data.password)
         if not authenticated_user:
             raise InvalidCredentialsException
+        await self.update_last_login(authenticated_user.id, session)
         set_tokens(response=response, user_id=authenticated_user.id)
         return SUserInfo.model_validate(authenticated_user)
 

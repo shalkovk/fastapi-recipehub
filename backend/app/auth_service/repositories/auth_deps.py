@@ -3,3 +3,7 @@ from utils.exceptions import UserNotFoundException, TokenNotFound, NoJwtExceptio
 
 async def get_current_user():
     pass
+
+
+async def get_current_admin_user():
+    pass

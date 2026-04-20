@@ -11,3 +11,7 @@ async def get_current_admin_user():
 
 async def get_access_token():
     pass
+
+
+async def get_refresh_token():
+    pass

@@ -9,11 +9,11 @@ async def get_current_admin_user():
     pass
 
 
-async def get_access_token():
+def get_access_token():
     pass
 
 
-async def get_refresh_token():
+def get_refresh_token():
     pass
 
 

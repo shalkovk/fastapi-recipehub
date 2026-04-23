@@ -1,4 +1,5 @@
 from utils.exceptions import UserNotFoundException, TokenNotFound, NoJwtException, NoUserIdException
+from fastapi import Request
 
 
 async def get_current_user():

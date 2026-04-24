@@ -1,5 +1,6 @@
 from utils.exceptions import UserNotFoundException, TokenNotFound, NoJwtException, NoUserIdException
 from fastapi import Request
+from db.database_deps import get_session_with_commit
 
 
 async def get_current_user():

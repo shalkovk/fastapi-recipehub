@@ -1,5 +1,6 @@
-from utils.exceptions import UserNotFoundException, TokenNotFound, NoJwtException, NoUserIdException
-from fastapi import Request
+from utils.exceptions import UserNotFoundException, TokenNotFound, NoJwtException, NoUserIdException, ForbiddenException
+from models.models import User
+from fastapi import Request, Depends
 
 
 def get_access_token(request: Request) -> str:
@@ -20,9 +21,11 @@ async def get_current_user():
     pass
 
 
-async def get_current_admin_user():
-    pass
-
-
 async def check_refresh_token():
     pass
+
+
+async def get_current_admin_user(current_user: User = Depends(get_current_user)) -> User:
+    if current_user.role.id in [3, 4]:
+        return current_user
+    raise ForbiddenException

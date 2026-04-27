@@ -17,7 +17,7 @@ def get_refresh_token(request: Request) -> str:
     return token
 
 
-async def get_current_user():
+async def get_current_user() -> str:
     pass
 
 

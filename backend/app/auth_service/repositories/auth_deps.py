@@ -1,5 +1,6 @@
 from utils.exceptions import UserNotFoundException, TokenNotFound, NoJwtException, NoUserIdException
 from fastapi import Request
+from models.models import User
 from db.database_deps import get_session_with_commit
 
 
@@ -17,13 +18,13 @@ def get_refresh_token(request: Request) -> str:
     return token
 
 
-async def get_current_user() -> str:
+async def get_current_user() -> User:
     pass
 
 
-async def get_current_admin_user():
+async def get_current_admin_user() -> User:
     pass
 
 
-async def check_refresh_token():
+async def check_refresh_token() -> str:
     pass

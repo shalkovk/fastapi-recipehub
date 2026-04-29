@@ -1,7 +1,13 @@
-from utils.exceptions import UserNotFoundException, TokenNotFound, NoJwtException, NoUserIdException
-from fastapi import Request
+from datetime import datetime, timezone
+from jose import jwt, JWTError, ExpiredSignatureError
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from models.models import User
-from db.database_deps import get_session_with_commit
+from utils.exceptions import UserNotFoundException, TokenNotFound, NoJwtException, NoUserIdException
+from db.database_deps import get_session_with_commit, get_session_without_commit
+from config import settings
+
+from fastapi import Request, Depends
 
 
 def get_access_token(request: Request) -> str:
@@ -18,13 +24,21 @@ def get_refresh_token(request: Request) -> str:
     return token
 
 
+async def check_refresh_token(token: str = Depends(get_refresh_token), session: AsyncSession = Depends(get_session_without_commit)) -> str:
+    try:
+        payload = jwt.decode(token, settings.secret_key,
+                             algorithms=[settings.algorithm])
+        user_id = payload.get("sub")
+        if not user_id:
+            raise NoJwtException
+
+    except JWTError:
+        raise NoJwtException
+
+
 async def get_current_user() -> User:
     pass
 
 
 async def get_current_admin_user() -> User:
-    pass
-
-
-async def check_refresh_token() -> str:
     pass

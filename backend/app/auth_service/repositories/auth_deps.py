@@ -3,6 +3,7 @@ from jose import jwt, JWTError, ExpiredSignatureError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from models.models import User
+from repositories.user_repository import UserRepository
 from utils.exceptions import UserNotFoundException, TokenNotFound, NoJwtException, NoUserIdException
 from db.database_deps import get_session_with_commit, get_session_without_commit
 from config import settings
@@ -31,7 +32,11 @@ async def check_refresh_token(token: str = Depends(get_refresh_token), session: 
         user_id = payload.get("sub")
         if not user_id:
             raise NoJwtException
-
+        repository = UserRepository()
+        user = await repository.get_user_by_id(user_id, session=session)
+        if not user:
+            raise NoJwtException
+        return user
     except JWTError:
         raise NoJwtException
 

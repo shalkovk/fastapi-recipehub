@@ -41,9 +41,9 @@ async def check_refresh_token(token: str = Depends(get_refresh_token), session: 
         raise NoJwtException
 
 
-async def get_current_user() -> User:
+async def get_current_user(token: str = Depends(get_access_token), session: AsyncSession = Depends(get_session_without_commit)) -> User:
     pass
 
 
-async def get_current_admin_user() -> User:
+async def get_current_admin_user(token: str = Depends(get_access_token), session: AsyncSession = Depends(get_session_without_commit)) -> User:
     pass

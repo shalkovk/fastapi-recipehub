@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from models.models import User
 from repositories.user_repository import UserRepository
-from utils.exceptions import UserNotFoundException, TokenNotFound, NoJwtException, NoUserIdException
+from utils.exceptions import UserNotFoundException, TokenNotFound, NoJwtException, NoUserIdException, ForbiddenException
 from db.database_deps import get_session_with_commit, get_session_without_commit
 from config import settings
 
@@ -45,5 +45,7 @@ async def get_current_user(token: str = Depends(get_access_token), session: Asyn
     pass
 
 
-async def get_current_admin_user(token: str = Depends(get_access_token), session: AsyncSession = Depends(get_session_without_commit)) -> User:
-    pass
+async def get_current_admin_user(current_user: User = Depends(get_current_user)) -> User:
+    if current_user.role.id in [3, 4]:
+        return current_user
+    raise ForbiddenException

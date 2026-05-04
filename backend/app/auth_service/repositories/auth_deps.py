@@ -49,7 +49,6 @@ async def get_current_user(token: str = Depends(get_access_token), session: Asyn
         raise TokenExpiredException
     except JWTError:
         raise NoJwtException
-
     expire: str = payload.get("expt")
     expire_time = datetime.fromtimestamp(int(expire), tz=timezone.utc)
     if (not expire) or (expire_time < datetime.now(timezone.utc)):

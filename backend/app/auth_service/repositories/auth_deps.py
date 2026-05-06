@@ -56,7 +56,6 @@ async def get_current_user(token: str = Depends(get_access_token), session: Asyn
     user_id: str = payload.get("sub")
     if not user_id:
         raise NoUserIdException
-
     repository = UserRepository()
     user = await repository.get_user_by_id(user_id, session=session)
     if not user:

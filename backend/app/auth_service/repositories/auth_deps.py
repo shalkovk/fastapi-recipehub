@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from models.models import User
 from repositories.user_repository import UserRepository
 from utils.exceptions import UserNotFoundException, TokenNotFound, NoJwtException, NoUserIdException, ForbiddenException, TokenExpiredException
-from db.database_deps import get_session_with_commit, get_session_without_commit
+from db.database_deps import get_session_without_commit
 from config import settings
 
 from fastapi import Request, Depends

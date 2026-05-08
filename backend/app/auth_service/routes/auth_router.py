@@ -24,3 +24,10 @@ async def login_user(auth_data: SUserAuth, response: Response, session: AsyncSes
     service = UserService()
     user_info = await service.login_user(auth_data, response, session)
     return user_info
+
+
+@router.post("/logout", status_code=status.HTTP_204_NO_CONTENT)
+async def logout(response: Response):
+    response.delete_cookie(key="user_access_token")
+    response.delete_cookie(key="user_refresh_token")
+    return {"message": "Successfully logged out"}

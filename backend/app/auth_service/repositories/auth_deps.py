@@ -25,18 +25,25 @@ def get_refresh_token(request: Request) -> str:
     return token
 
 
-async def check_refresh_token(token: str = Depends(get_refresh_token), session: AsyncSession = Depends(get_session_without_commit)) -> str:
+async def check_refresh_token(token: str = Depends(get_refresh_token), session: AsyncSession = Depends(get_session_without_commit)) -> User:
     try:
         payload = jwt.decode(token, settings.secret_key,
                              algorithms=[settings.algorithm])
-        user_id = payload.get("sub")
-        if not user_id:
+        user_id_str = payload.get("sub")
+        if not user_id_str:
             raise NoJwtException
+        try:
+            user_id = int(user_id_str)
+        except (TypeError, ValueError):
+            raise NoUserIdException
+
         repository = UserRepository()
         user = await repository.get_user_by_id(user_id, session=session)
         if not user:
             raise NoJwtException
         return user
+    except ExpiredSignatureError:
+        raise TokenExpiredException
     except JWTError:
         raise NoJwtException
 
@@ -45,22 +52,28 @@ async def get_current_user(token: str = Depends(get_access_token), session: Asyn
     try:
         payload = jwt.decode(token, settings.secret_key,
                              algorithms=[settings.algorithm])
+        user_id_str = payload.get("sub")
+        if not user_id_str:
+            raise NoJwtException
+        try:
+            user_id = int(user_id_str)
+        except (TypeError, ValueError):
+            raise NoUserIdException
+
+        exp: int = payload.get("exp")
+        if not exp or datetime.fromtimestamp(exp, tz=timezone.utc) < datetime.now(timezone.utc):
+            raise TokenExpiredException
+
+        repository = UserRepository()
+        user = await repository.get_user_by_id(user_id, session)
+
+        if not user:
+            raise UserNotFoundException
+        return user
     except ExpiredSignatureError:
         raise TokenExpiredException
     except JWTError:
         raise NoJwtException
-    expire: str = payload.get("expt")
-    expire_time = datetime.fromtimestamp(int(expire), tz=timezone.utc)
-    if (not expire) or (expire_time < datetime.now(timezone.utc)):
-        raise TokenExpiredException
-    user_id: str = payload.get("sub")
-    if not user_id:
-        raise NoUserIdException
-    repository = UserRepository()
-    user = await repository.get_user_by_id(user_id, session=session)
-    if not user:
-        raise UserNotFoundException
-    return user
 
 
 async def get_current_admin_user(current_user: User = Depends(get_current_user)) -> User:

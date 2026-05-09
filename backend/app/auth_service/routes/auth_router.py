@@ -7,6 +7,7 @@ from db.database_deps import get_session_with_commit, get_session_without_commit
 from services.user_service import UserService
 from schemas.schemas import SUserInfo, SUserRegister, SUserAuth
 from utils.exceptions import UserAlreadyExistsException, InvalidCredentialsException
+from utils.utils import set_tokens
 
 router = APIRouter(
     prefix="/api/auth",
@@ -38,3 +39,9 @@ async def logout(response: Response):
 @router.get("/me", response_model=SUserInfo, status_code=status.HTTP_200_OK)
 async def get_me(user_data: User = Depends(get_current_user)) -> SUserInfo:
     return SUserInfo.model_validate(user_data)
+
+
+@router.post("/refresh")
+async def refresh_token(response: Response, user: User = Depends(get_current_user)):
+    set_tokens(response, user.id)
+    return {"message": "Tokens are now up-to-date"}

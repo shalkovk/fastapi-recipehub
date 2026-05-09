@@ -1,7 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from db.database_deps import get_session_with_commit, get_session_with_commit
+from repositories.auth_deps import get_current_user
+from models.models import User
+from db.database_deps import get_session_with_commit, get_session_without_commit
 from services.user_service import UserService
 from schemas.schemas import SUserInfo, SUserRegister, SUserAuth
 from utils.exceptions import UserAlreadyExistsException, InvalidCredentialsException
@@ -31,3 +33,8 @@ async def logout(response: Response):
     response.delete_cookie(key="user_access_token")
     response.delete_cookie(key="user_refresh_token")
     return {"message": "Successfully logged out"}
+
+
+@router.get("/me", response_model=SUserInfo, status_code=status.HTTP_200_OK)
+async def get_me(user_data: User = Depends(get_current_user)) -> SUserInfo:
+    return SUserInfo.model_validate(user_data)

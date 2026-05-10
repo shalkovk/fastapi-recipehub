@@ -6,7 +6,6 @@ from models.models import User
 from db.database_deps import get_session_with_commit, get_session_without_commit
 from services.user_service import UserService
 from schemas.schemas import SUserInfo, SUserRegister, SUserAuth
-from utils.exceptions import UserAlreadyExistsException, InvalidCredentialsException
 from utils.utils import set_tokens
 
 router = APIRouter(

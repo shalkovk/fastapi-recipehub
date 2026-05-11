@@ -8,6 +8,7 @@ from services.user_service import UserService
 from schemas.schemas import SUserInfo, SUserRegister, SUserAuth
 from utils.utils import set_tokens
 
+
 router = APIRouter(
     prefix="/api/auth",
     tags=["authorization"]

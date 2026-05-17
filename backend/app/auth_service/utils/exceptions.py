@@ -1,5 +1,4 @@
 from fastapi import status, HTTPException
-# TokenNoFound, NoJwtException, TokenExpiredException, NoUserIdException, ForbiddenException, UserNotFoundException
 
 
 UserAlreadyExistsException = HTTPException(
